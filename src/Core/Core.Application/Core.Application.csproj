@@ -8,8 +8,12 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Folder Include="Pipelines\Authorization" />
-      <Folder Include="Pipelines\Caching" />
+      <Folder Include="Pipelines" />
+      <Folder Include="Requests" />
+      <Folder Include="Pipelines\Authorization\" />
+      <Folder Include="Pipelines\Caching\" />
+      <Folder Include="Pipelines\Logging\" />
+      <Folder Include="Pipelines\Validation\" />
     </ItemGroup>
 
     <ItemGroup>
@@ -22,6 +26,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Core.CrossCuttingConcerns\Core.CrossCuttingConcerns.csproj" />
+      <ProjectReference Include="..\Core.Security\Core.Security.csproj" />
     </ItemGroup>
 
 </Project>
