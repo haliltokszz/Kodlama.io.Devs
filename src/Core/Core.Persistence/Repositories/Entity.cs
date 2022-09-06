@@ -2,7 +2,7 @@
 
 public class Entity
 {
-    public Guid Id { get; } = Guid.NewGuid();
+    public Guid Id { get; set; } = Guid.NewGuid();
     public DateTime CreatedDate { get; }
     public DateTime UpdatedDate { get; set; }
     public DateTime DeletedDate { get; }
