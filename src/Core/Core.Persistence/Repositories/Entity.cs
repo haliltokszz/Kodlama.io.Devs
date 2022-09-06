@@ -5,7 +5,7 @@ public class Entity
     public Guid Id { get; set; } = Guid.NewGuid();
     public DateTime CreatedDate { get; }
     public DateTime UpdatedDate { get; set; }
-    public DateTime DeletedDate { get; }
+    public DateTime DeletedDate { get; set; }
     public bool isDeleted { get; set; } = false;
 
     public Entity()
