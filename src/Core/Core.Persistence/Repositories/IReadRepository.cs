@@ -17,7 +17,6 @@ public interface IReadRepository<T> : IRepository<T> where T : Entity
         int index = 0, int size = 10, bool tracking = true,
         CancellationToken cancellationToken = default);
     
-    Task<T> GetSingleAsync(Expression<Func<T, bool>> method, bool tracking = true);
-    IQueryable<T> GetWhere(Expression<Func<T, bool>> method, bool tracking = true);
+    Task<T> GetAsync(Expression<Func<T, bool>> predicate, bool tracking = true);
     Task<T> GetByIdAsync(string id, bool tracking = true);
 }
