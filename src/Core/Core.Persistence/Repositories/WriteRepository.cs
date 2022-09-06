@@ -34,8 +34,43 @@ public class WriteRepository<T, TContext> : IWriteRepository<T>
         }
         return entities;
     }
-    
-    public async Task<T> Remove(T entity, bool withSave = true)
+
+    public async Task<T> SoftRemove(T entity, bool withSave = true)
+    {
+        entity.isDeleted = true;
+        entity.DeletedDate = DateTime.Now;
+        
+        EntityEntry<T> entry = Table.Update(entity);
+        if (withSave)
+        {
+            await SaveAsync();
+        }
+        return entry.Entity;
+    }
+
+    public async Task<List<T>> SoftRemoveRange(List<T> entities, bool withSave = true)
+    {
+        entities.ForEach(entity=>
+        {
+            entity.isDeleted = true;
+            entity.DeletedDate = DateTime.Now;
+        });
+
+        Table.UpdateRange(entities);
+        if (withSave)
+        {
+            await SaveAsync();
+        }
+        return entities;
+    }
+
+    public async Task<T> SoftRemoveAsync(string id, bool withSave = true)
+    {
+        T entity = await Table.FirstOrDefaultAsync(data => data.Id == Guid.Parse(id));
+        return await SoftRemove(entity, withSave);
+    }
+
+    public async Task<T> HardRemove(T entity, bool withSave = true)
     {
         EntityEntry<T> entry = Table.Remove(entity);
         if (withSave)
@@ -45,7 +80,7 @@ public class WriteRepository<T, TContext> : IWriteRepository<T>
         return entry.Entity;
     }
 
-    public async Task<List<T>> RemoveRange(List<T> entities, bool withSave = true)
+    public async Task<List<T>> HardRemoveRange(List<T> entities, bool withSave = true)
     {
         Table.RemoveRange(entities);
         if (withSave)
@@ -55,10 +90,10 @@ public class WriteRepository<T, TContext> : IWriteRepository<T>
         return entities;
     }
 
-    public async Task<T> RemoveAsync(string id, bool withSave)
+    public async Task<T> HardRemoveAsync(string id, bool withSave)
     {
         T entity = await Table.FirstOrDefaultAsync(data => data.Id == Guid.Parse(id));
-        return await Remove(entity, withSave);
+        return await HardRemove(entity, withSave);
     }
 
     public async Task<T> Update(T entity, bool withSave = true)
