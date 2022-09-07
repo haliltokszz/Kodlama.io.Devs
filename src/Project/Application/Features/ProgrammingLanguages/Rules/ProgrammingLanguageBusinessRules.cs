@@ -20,8 +20,7 @@ public class ProgrammingLanguageBusinessRules
         IPaginate<ProgrammingLanguage> result = await _programmingLanguageReadRepository.GetListAsync(b => b.Name == name);
         if (result.Items.Any()) throw new BusinessException(ProgrammingLanguageMessages.ProgrammingLanguageNameAlreadyExists); //TODO: Localize message.
     }
-
-    public async Task CheckIfProgrammingLanguageExists(ProgrammingLanguage programmingLanguage)
+    public async Task CheckIfProgrammingLanguageDoesNotExists(ProgrammingLanguage programmingLanguage)
     {
         if (programmingLanguage == null) throw new BusinessException(ProgrammingLanguageMessages.ProgrammingLanguageNotFound); //TODO: Localize message.
     }

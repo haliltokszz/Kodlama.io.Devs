@@ -27,7 +27,7 @@ public class GetByIdProgrammingLanguageQuery : IRequest<ProgrammingLanguageByIdD
         public async Task<ProgrammingLanguageByIdDTO> Handle(GetByIdProgrammingLanguageQuery request, CancellationToken cancellationToken)
         {
             var programmingLanguage = await _programmingLanguageReadRepository.GetByIdAsync(request.Id);
-            await _programmingLanguageBusinessRules.CheckIfProgrammingLanguageExists(programmingLanguage);
+            await _programmingLanguageBusinessRules.CheckIfProgrammingLanguageDoesNotExists(programmingLanguage);
             
             return _mapper.Map<ProgrammingLanguageByIdDTO>(programmingLanguage);
         }
