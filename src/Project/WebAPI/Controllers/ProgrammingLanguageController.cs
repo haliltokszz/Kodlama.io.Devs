@@ -1,4 +1,7 @@
 ﻿using Application.Features.ProgrammingLanguages.Commands;
+using Application.Features.ProgrammingLanguages.Commands.CreateCommand;
+using Application.Features.ProgrammingLanguages.Commands.DeleteCommand;
+using Application.Features.ProgrammingLanguages.Commands.UpdateCommand;
 using Application.Features.ProgrammingLanguages.Queries;
 using Core.Application.Requests;
 using Microsoft.AspNetCore.Mvc;
@@ -27,6 +30,20 @@ public class ProgrammingLanguageController : BaseController
     public async Task<IActionResult> Get([FromRoute] GetByIdProgrammingLanguageQuery getByIdProgrammingLanguageQuery)
     {
         var result = await Mediator.Send(getByIdProgrammingLanguageQuery);
+        return Ok(result);
+    }
+    
+    [HttpPut]
+    public async Task<IActionResult> Get([FromBody] UpdateProgrammingLanguageCommand updateProgrammingLanguageCommand)
+    {
+        var result = await Mediator.Send(updateProgrammingLanguageCommand);
+        return Ok(result);
+    }
+    
+    [HttpDelete]
+    public async Task<IActionResult> Get([FromQuery] DeleteProgrammingLanguageCommand deleteProgrammingLanguageCommand)
+    {
+        var result = await Mediator.Send(deleteProgrammingLanguageCommand);
         return Ok(result);
     }
 }
