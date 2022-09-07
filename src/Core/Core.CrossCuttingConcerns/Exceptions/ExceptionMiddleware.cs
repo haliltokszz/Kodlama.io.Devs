@@ -29,11 +29,12 @@ public class ExceptionMiddleware
     private Task HandleExceptionAsync(HttpContext context, Exception exception)
     {
         context.Response.ContentType = "application/json";
+        var exceptionType = exception.GetType(); //TODO: add AutomapperMappingException
 
-        if (exception.GetType() == typeof(ValidationException)) return CreateValidationException(context, exception);
-        if (exception.GetType() == typeof(BusinessException)) return CreateBusinessException(context, exception);
-        if (exception.GetType() == typeof(AuthorizationException)) return CreateAuthorizationException(context, exception);
-        if (exception.GetType() == typeof(InvalidOperationException)) return CreateInvalidOperationException(context, exception);
+        if (exceptionType == typeof(ValidationException)) return CreateValidationException(context, exception);
+        if (exceptionType == typeof(BusinessException)) return CreateBusinessException(context, exception);
+        if (exceptionType == typeof(AuthorizationException)) return CreateAuthorizationException(context, exception);
+        if (exceptionType == typeof(InvalidOperationException)) return CreateInvalidOperationException(context, exception);
         return CreateInternalException(context, exception);
     }
 
