@@ -1,9 +1,9 @@
-﻿using Application.Services.Repositories;
+﻿using Application.Services.Repositories.ProgrammingLanguages;
 using Core.Persistence.Repositories;
 using Domain.Entities;
 using Persistence.Contexts;
 
-namespace Persistence.Repositories;
+namespace Persistence.Repositories.ProgrammingLanguages;
 
 public class ProgrammingLanguageWriteRepository : WriteRepository<ProgrammingLanguage, KodlamaIODevsDbContext>, IProgrammingLanguageWriteRepository
 {
