@@ -100,12 +100,12 @@ public class ExceptionMiddleware
     {
         context.Response.StatusCode = Convert.ToInt32(HttpStatusCode.InternalServerError);
 
-        return context.Response.WriteAsync(new ProblemDetails
+        return context.Response.WriteAsync(new InternalExceptionDetails
         {
             Status = StatusCodes.Status500InternalServerError,
             Type = "https://example.com/probs/internal",
             Title = "Internal exception",
-            Detail = exception.Message,
+            Detail = exception.Message + " Inner Exception: " + exception.InnerException?.Message,
             Instance = ""
         }.ToString());
     }
