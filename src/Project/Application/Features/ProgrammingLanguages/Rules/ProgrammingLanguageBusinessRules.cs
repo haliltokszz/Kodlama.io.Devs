@@ -1,5 +1,6 @@
 ﻿using Application.Features.ProgrammingLanguages.Constants;
 using Application.Services.Repositories;
+using Application.Services.Repositories.ProgrammingLanguages;
 using Core.CrossCuttingConcerns.Exceptions;
 using Core.Persistence.Paging;
 using Domain.Entities;
@@ -15,7 +16,7 @@ public class ProgrammingLanguageBusinessRules
         _programmingLanguageReadRepository = programmingLanguageReadRepository;
     }
     
-    public async Task CheckIfProgrammingLanguageNameIsUnique(string name)
+    public async Task CheckIfProgrammingLanguageNameIsAlreadyExists(string name)
     {
         IPaginate<ProgrammingLanguage> result = await _programmingLanguageReadRepository.GetListAsync(b => b.Name == name);
         if (result.Items.Any()) throw new BusinessException(ProgrammingLanguageMessages.ProgrammingLanguageNameAlreadyExists); //TODO: Localize message.

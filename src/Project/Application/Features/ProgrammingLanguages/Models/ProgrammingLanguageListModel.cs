@@ -1,9 +1,9 @@
-﻿using Application.Features.ProgrammingLanguages.DTOs;
+﻿using Application.Features.ProgrammingLanguages.Dtos;
 using Core.Persistence.Paging;
 
 namespace Application.Features.ProgrammingLanguages.Models;
 
 public class ProgrammingLanguageListModel : BasePageableModel 
 {
-    public IEnumerable<ProgrammingLanguageListDTO> Items { get; set; }
+    public IEnumerable<ProgrammingLanguageListDto> Items { get; set; }
 }

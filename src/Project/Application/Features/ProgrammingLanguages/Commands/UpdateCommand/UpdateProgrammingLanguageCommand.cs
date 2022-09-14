@@ -1,19 +1,20 @@
-﻿using Application.Features.ProgrammingLanguages.DTOs;
+﻿using Application.Features.ProgrammingLanguages.Dtos;
 using Application.Features.ProgrammingLanguages.Rules;
 using Application.Services.Repositories;
+using Application.Services.Repositories.ProgrammingLanguages;
 using AutoMapper;
 using Domain.Entities;
 using MediatR;
 
 namespace Application.Features.ProgrammingLanguages.Commands.UpdateCommand;
 
-public class UpdateProgrammingLanguageCommand : IRequest<UpdatedProgrammingLanguageDTO>
+public class UpdateProgrammingLanguageCommand : IRequest<UpdatedProgrammingLanguageDto>
 {
     public string Id { get; set; }
     public string Name { get; set; }
-    public bool isDeleted { get; set; }
+    public bool? isDeleted { get; set; }
     
-    public class UpdateProgrammingLanguageCommandHandler : IRequestHandler<UpdateProgrammingLanguageCommand, UpdatedProgrammingLanguageDTO>
+    public class UpdateProgrammingLanguageCommandHandler : IRequestHandler<UpdateProgrammingLanguageCommand, UpdatedProgrammingLanguageDto>
     {
         private readonly IProgrammingLanguageWriteRepository _programmingLanguageWriteRepository;
         private readonly IProgrammingLanguageReadRepository _programmingLanguageReadRepository;
@@ -28,7 +29,7 @@ public class UpdateProgrammingLanguageCommand : IRequest<UpdatedProgrammingLangu
             _mapper = mapper;
         }
         
-        public async Task<UpdatedProgrammingLanguageDTO> Handle(UpdateProgrammingLanguageCommand request, CancellationToken cancellationToken)
+        public async Task<UpdatedProgrammingLanguageDto> Handle(UpdateProgrammingLanguageCommand request, CancellationToken cancellationToken)
         {
             var programmingLanguageToUpdate = await _programmingLanguageReadRepository.GetByIdAsync(request.Id);
             await _programmingLanguageBusinessRules
@@ -36,7 +37,7 @@ public class UpdateProgrammingLanguageCommand : IRequest<UpdatedProgrammingLangu
 
             _mapper.Map(request, programmingLanguageToUpdate, typeof(UpdateProgrammingLanguageCommand), typeof(ProgrammingLanguage));
              await _programmingLanguageWriteRepository.Update(programmingLanguageToUpdate);
-            return _mapper.Map<UpdatedProgrammingLanguageDTO>(programmingLanguageToUpdate);
+            return _mapper.Map<UpdatedProgrammingLanguageDto>(programmingLanguageToUpdate);
         }
     }
 }

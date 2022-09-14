@@ -1,8 +1,10 @@
 ﻿using Application.Features.ProgrammingLanguages.Models;
 using Application.Services.Repositories;
+using Application.Services.Repositories.ProgrammingLanguages;
 using AutoMapper;
 using Core.Application.Requests;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace Application.Features.ProgrammingLanguages.Queries;
 
@@ -23,7 +25,8 @@ public class GetListProgrammingLanguageQuery: IRequest<ProgrammingLanguageListMo
 
         public async Task<ProgrammingLanguageListModel> Handle(GetListProgrammingLanguageQuery request, CancellationToken cancellationToken)
         {
-            var programmingLanguages = await _programmingLanguageReadRepository.GetListAsync(index: request.PageRequest.Page, size: request.PageRequest.PageSize);
+            var programmingLanguages = await _programmingLanguageReadRepository.GetListAsync(include: m=>m.Include(p=>p.Frameworks),
+                index: request.PageRequest.Page, size: request.PageRequest.PageSize);
             return _mapper.Map<ProgrammingLanguageListModel>(programmingLanguages);
         }
     }

@@ -1,18 +1,19 @@
-﻿using Application.Features.ProgrammingLanguages.DTOs;
+﻿using Application.Features.ProgrammingLanguages.Dtos;
 using Application.Features.ProgrammingLanguages.Rules;
 using Application.Services.Repositories;
+using Application.Services.Repositories.ProgrammingLanguages;
 using AutoMapper;
 using Domain.Entities;
 using MediatR;
 
 namespace Application.Features.ProgrammingLanguages.Commands.DeleteCommand;
 
-public class DeleteProgrammingLanguageCommand : IRequest<DeletedProgrammingLanguageDTO>
+public class DeleteProgrammingLanguageCommand : IRequest<DeletedProgrammingLanguageDto>
 {
     public string Id { get; set; }
     public bool isSoftDelete { get; set; }
     
-    public class DeleteProgrammingLanguageCommandHandler:IRequestHandler<DeleteProgrammingLanguageCommand, DeletedProgrammingLanguageDTO>
+    public class DeleteProgrammingLanguageCommandHandler:IRequestHandler<DeleteProgrammingLanguageCommand, DeletedProgrammingLanguageDto>
     {
         private readonly IProgrammingLanguageWriteRepository _programmingLanguageWriteRepository;
         private readonly IProgrammingLanguageReadRepository _programmingLanguageReadRepository;
@@ -27,7 +28,7 @@ public class DeleteProgrammingLanguageCommand : IRequest<DeletedProgrammingLangu
             _programmingLanguageWriteRepository = programmingLanguageWriteRepository;
         }
 
-        public async Task<DeletedProgrammingLanguageDTO> Handle(DeleteProgrammingLanguageCommand request, CancellationToken cancellationToken)
+        public async Task<DeletedProgrammingLanguageDto> Handle(DeleteProgrammingLanguageCommand request, CancellationToken cancellationToken)
         {
             var programmingLanguage = await _programmingLanguageReadRepository.GetByIdAsync(request.Id);
             await _programmingLanguageBusinessRules.CheckIfProgrammingLanguageDoesNotExists(programmingLanguage);
@@ -38,7 +39,7 @@ public class DeleteProgrammingLanguageCommand : IRequest<DeletedProgrammingLangu
             else
                 deletedProgrammingLanguage = await _programmingLanguageWriteRepository.HardRemove(programmingLanguage);
             
-            return _mapper.Map<DeletedProgrammingLanguageDTO>(deletedProgrammingLanguage);
+            return _mapper.Map<DeletedProgrammingLanguageDto>(deletedProgrammingLanguage);
         }
     }
 }
