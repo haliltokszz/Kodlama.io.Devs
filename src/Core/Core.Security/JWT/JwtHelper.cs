@@ -14,6 +14,7 @@ public class JwtHelper : ITokenHelper
     public IConfiguration Configuration { get; }
     private readonly TokenOptions _tokenOptions;
     private DateTime _accessTokenExpiration;
+    private DateTime _refreshTokenExpiration;
 
     public JwtHelper(IConfiguration configuration)
     {
@@ -39,11 +40,12 @@ public class JwtHelper : ITokenHelper
 
     public RefreshToken CreateRefreshToken(User user, string ipAddress)
     {
+        _refreshTokenExpiration = DateTime.Now.AddMinutes(_tokenOptions.AccessTokenExpiration + _tokenOptions.RefreshTokenExpiration);
         RefreshToken refreshToken = new()
         {
             UserId = user.Id,
             Token = Convert.ToBase64String(RandomNumberGenerator.GetBytes(64)),
-            Expires = DateTime.UtcNow.AddDays(7),
+            Expires = _refreshTokenExpiration,
             Created = DateTime.UtcNow,
             CreatedByIp = ipAddress
         };
@@ -74,5 +76,24 @@ public class JwtHelper : ITokenHelper
         claims.AddName($"{user.FirstName} {user.LastName}");
         claims.AddRoles(operationClaims.Select(c => c.Name).ToArray());
         return claims;
+    }
+    
+    public ClaimsPrincipal GetPrincipalFromExpiredToken(string token)
+    {
+        var tokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateAudience = false, //you might want to validate the audience and issuer depending on your use case
+            ValidateIssuer = false,
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = SecurityKeyHelper.CreateSecurityKey(_tokenOptions.SecurityKey),
+            ValidateLifetime = false //here we are saying that we don't care about the token's expiration date
+        };
+        var tokenHandler = new JwtSecurityTokenHandler();
+        SecurityToken securityToken;
+        var principal = tokenHandler.ValidateToken(token, tokenValidationParameters, out securityToken);
+        var jwtSecurityToken = securityToken as JwtSecurityToken;
+        if (jwtSecurityToken == null || !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha512Signature, StringComparison.InvariantCultureIgnoreCase))
+            throw new SecurityTokenException("Invalid token");
+        return principal;
     }
 }
