@@ -4,7 +4,7 @@ namespace Core.Security.Entities;
 
 public class RefreshToken : Entity
 {
-    public Guid UserId { get; set; } = Guid.NewGuid();
+    public Guid UserId { get; set; }
     public string Token { get; set; }
     public DateTime Expires { get; set; }
     public DateTime Created { get; set; }
