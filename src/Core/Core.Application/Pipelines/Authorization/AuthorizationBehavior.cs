@@ -1,4 +1,5 @@
-﻿using Core.CrossCuttingConcerns.Exceptions;
+﻿using Core.CrossCuttingConcerns.Constant;
+using Core.CrossCuttingConcerns.Exceptions;
 using Core.Security.Extensions;
 using MediatR;
 using Microsoft.AspNetCore.Http;
@@ -21,7 +22,7 @@ public class AuthorizationBehavior<TRequest, TResponse> : IPipelineBehavior<TReq
         if(roleClaims is null) throw new AuthorizationException("Claims not found"); //TODO: Add localization and use resource file
         
         bool isNotMatchedARoleClaimWithRequestRoles = roleClaims.Any(roleClaim => !request.Roles.Contains(roleClaim));
-        if(isNotMatchedARoleClaimWithRequestRoles) throw new AuthorizationException("You are not authorized to access this resource"); //TODO: Add localization and use resource file
+        if(isNotMatchedARoleClaimWithRequestRoles) throw new AuthorizationException(AspectMessages.AuthorizationDenied); //TODO: Add localization
 
         var response = await next();
         return response;
