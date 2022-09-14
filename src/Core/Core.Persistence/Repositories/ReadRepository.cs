@@ -39,11 +39,11 @@ public class ReadRepository<T, TContext> : IReadRepository<T>
         return await queryable.ToPaginateAsync(index, size, 0, cancellationToken);
     }
 
-    public async Task<T> GetAsync(Expression<Func<T, bool>> predicate, bool tracking = true)
+    public async Task<T> GetAsync(Expression<Func<T, bool>> predicate, Func<IQueryable<T>, IIncludableQueryable<T, object>>? include = null, bool tracking = true)
     {
         var queryable = Query();
-        if (!tracking)
-            queryable = queryable.AsNoTracking();
+        if (!tracking) queryable = queryable.AsNoTracking();
+        if (include != null) queryable = include(queryable);
         return await queryable.FirstOrDefaultAsync(predicate);
     }
 
