@@ -18,7 +18,8 @@ public class MappingProfile : Profile
             opt=>opt.MapFrom(f=>f.ProgrammingLanguage.Name)).ReverseMap();
         CreateMap<Framework, CreateFrameworkCommand>().ReverseMap();
         CreateMap<Framework, FrameworkListDto>().ReverseMap();
-        CreateMap<Framework, UpdateFrameworkCommand>().ReverseMap().ForMember(dest => dest.ProgrammingLanguageId, opt => opt.Ignore()) 
+        CreateMap<Framework, UpdateFrameworkCommand>().ReverseMap()
+            .ForMember(dest => dest.ProgrammingLanguageId, opt => opt.Ignore()) 
             .AfterMap((src, dest) => dest.ProgrammingLanguageId = string.IsNullOrEmpty(src.ProgrammingLanguageId) ? dest.ProgrammingLanguageId : Guid.Parse(src.ProgrammingLanguageId))
             .ForAllMembers(opt=>opt.Condition((src, dest, srcMember) => srcMember != null));
 
