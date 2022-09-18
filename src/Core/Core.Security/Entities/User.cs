@@ -12,7 +12,6 @@ public class User : Entity
     public byte[] PasswordHash { get; set; }
     public bool Status { get; set; }
     public AuthenticatorType AuthenticatorType { get; set; }
-
     public virtual ICollection<UserOperationClaim> UserOperationClaims { get; set; }
     public virtual ICollection<RefreshToken> RefreshTokens { get; set; }
 
@@ -22,13 +21,16 @@ public class User : Entity
         RefreshTokens = new HashSet<RefreshToken>();
     }
 
-    public User(Guid id, string firstName, string lastName, string email, byte[] passwordSalt, byte[] passwordHash,
-                bool status, AuthenticatorType authenticatorType) : this()
+    public User(Guid id, string firstName, string lastName, string email) : this()
     {
         Id = id;
         FirstName = firstName;
         LastName = lastName;
         Email = email;
+    }
+    public User(Guid id, string firstName, string lastName, string email, byte[] passwordSalt, byte[] passwordHash,
+                bool status, AuthenticatorType authenticatorType) : this(id, firstName, lastName, email)
+    {
         PasswordSalt = passwordSalt;
         PasswordHash = passwordHash;
         Status = status;
